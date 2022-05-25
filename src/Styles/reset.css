@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&display=swap");
 html,
 body,
 div,
@@ -129,6 +130,9 @@ strong {
   box-sizing: border-box;
   text-decoration: none;
   transition: all ease 0.2s;
+  font-family: "Lexend Deca", sans-serif;
+  font-style: normal;
+  font-weight: 400;
 }
 
 body {

@@ -1,3 +1,5 @@
-export default TelaHabitos() {
-
+export default function TelaHabitos() {
+    return (
+        <p>a</p>
+    )
 }

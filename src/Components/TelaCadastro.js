@@ -3,9 +3,15 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import logo from '../Assets/logo.png'
+import { Container } from './TelaLogin';
+import { LogoBox } from './TelaLogin';
+import { Form } from './TelaLogin';
+import { Button } from './TelaLogin';
+import { TextLink } from './TelaLogin';
+import { Input } from './TelaLogin';
 
 
-export default TelaCadastro() {
+export default function TelaCadastro() {
 
 
 
@@ -16,24 +22,13 @@ export default TelaCadastro() {
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
             <Form>
-                <label></label>
-                <Input></Input>
-                <label></label>
-                <Input></Input>
-                <Button></Button>
+                <Input placeholder='email'></Input>
+                <Input placeholder='senha'></Input>
+                <Input placeholder='nome'></Input>
+                <Input placeholder='foto'></Input>
+                <Button>Cadastrar</Button>
             </Form>
+            <TextLink>Já tem uma conta? Faça login!</TextLink>
         </Container>
     )
 }
-
-const Container = styled.div`
-
-`
-
-const LogoBox = styled.div`
-
-`
-
-const Form = styled.form`
-
-` 
