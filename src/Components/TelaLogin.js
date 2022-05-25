@@ -27,6 +27,7 @@ export default function TelaLogin() {
     function entrar (event) {
         event.preventDefault();
         setDisabled(true);
+        setLoading(true);
         // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
 
         const request = axios.post(URL, body);
@@ -34,6 +35,7 @@ export default function TelaLogin() {
         .then((res) => {
             console.log("Login feito com sucesso");
             setToken(res.data.token);
+            setLoading(false);
             navigate("/hoje");
         })
         .catch(err => {
@@ -113,6 +115,8 @@ const TextLink = styled.div`
 text-decoration: underline;
 font-size: 1rem;
 color: #52B6FF;
+font-family: 'Lexend Deca';
+font-style: normal;
 `
 export { TextLink }
 
@@ -124,9 +128,13 @@ border-radius: 8px;
 background-color: ${props => props.disabled ? '#F2F2F2' : '#FFFFFF'};
 border: 1px solid #D5D5D5;
 padding: 10px;
+opacity: ${props => props.disabled ? 0.7 : 1};
+
 ::placeholder{
     font-size: 20px;
     color: ${props => props.disabled ? '#AFAFAF;' :'#DBDBDB'};
+    font-family: 'Lexend Deca';
+    font-style: normal;
 } 
 `
 export { Input }

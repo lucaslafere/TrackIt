@@ -26,6 +26,7 @@ export default function TelaCadastro() {
     function cadastrar (event) {
         event.preventDefault();
         setDisabled(true)
+        setLoading(true);
     // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
 
 
@@ -33,6 +34,7 @@ export default function TelaCadastro() {
         request
         .then(() => {
             console.log("Cadastro feito com sucesso");
+            setLoading(false);
             navigate("/");
         })
         .catch(err => {
