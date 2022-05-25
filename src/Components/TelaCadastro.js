@@ -12,7 +12,7 @@ import { Input } from './TelaLogin';
 
 
 export default function TelaCadastro() {
-
+    const [disabled, setDisabled] = useEffect(false);
 
 
 
@@ -22,11 +22,11 @@ export default function TelaCadastro() {
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
             <Form>
-                <Input placeholder='email'></Input>
-                <Input placeholder='senha'></Input>
-                <Input placeholder='nome'></Input>
-                <Input placeholder='foto'></Input>
-                <Button>Cadastrar</Button>
+                <Input placeholder='email' disabled={disabled}></Input>
+                <Input placeholder='senha' disabled={disabled}></Input>
+                <Input placeholder='nome' disabled={disabled}></Input>
+                <Input placeholder='foto' disabled={disabled}></Input>
+                <Button disabled={disabled}>Cadastrar</Button>
             </Form>
             <TextLink>Já tem uma conta? Faça login!</TextLink>
         </Container>

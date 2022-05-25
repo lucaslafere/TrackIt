@@ -5,20 +5,27 @@ import styled from 'styled-components';
 import logo from '../Assets/logo.png'
 
 export default function TelaLogin() {
+    const [disabled, setDisabled] = useState(false);
+
+
     return (
         <Container>
             <LogoBox>
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
             <Form>
-                <Input placeholder='email'></Input>
-                <Input placeholder='senha'></Input>
-                <Button>Entrar</Button>
+                <Input placeholder='email' disabled={disabled}></Input>
+                <Input placeholder='senha' disabled={disabled}></Input>
+                <Button disabled={disabled} onClick={setDisabled}>Entrar</Button>
             </Form>
             <TextLink>Não tem uma conta? Cadastre-se!</TextLink>
         </Container>
     )
 }
+
+
+
+
 
 const Container = styled.div`
 display: flex;
@@ -56,9 +63,10 @@ height: 45px;
 background: #52B6FF;
 border: 1px solid #52B6FF;
 border-radius: 8px;
+opacity: ${props => props.disabled ? 0.7 : 1};
+
 font-weight: 400;
-font-size: 20.976px;
-line-height: 26px;
+font-size: 20px;
 color: #FFFFFF;
 font-family: 'Lexend Deca';
 font-style: normal;
@@ -68,7 +76,6 @@ export { Button }
 const TextLink = styled.div`
 text-decoration: underline;
 font-size: 1rem;
-line-height: 18px;
 color: #52B6FF;
 `
 export { TextLink }
@@ -78,12 +85,11 @@ const Input = styled.input`
 width: 90%;
 height: 45px;
 border-radius: 8px;
-background: #FFFFFF;
+background-color: ${props => props.disabled ? '#F2F2F2' : '#FFFFFF'};
 border: 1px solid #D5D5D5;
 padding: 10px;
 ::placeholder{
-font-size: 20px;
-line-height: 45px;
-color: #DBDBDB;
-}`
+    font-size: 20px;
+    color: ${props => props.disabled ? '#AFAFAF;' :'#DBDBDB'};
+} `
 export { Input }
