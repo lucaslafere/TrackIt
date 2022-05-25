@@ -8,6 +8,8 @@ import { Container, LogoBox, Form, Button, TextLink, Input } from './TelaLogin';
 
 export default function TelaCadastro() {
     const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [nome, setNome] = useState("");
@@ -24,11 +26,13 @@ export default function TelaCadastro() {
     function cadastrar (event) {
         event.preventDefault();
         setDisabled(true)
+    // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
+
 
         const request = axios.post(URL, body);
         request
         .then(() => {
-            console.log("Cadastro feito com sucesso" + body);
+            console.log("Cadastro feito com sucesso");
             navigate("/");
         })
         .catch(err => {
@@ -42,10 +46,10 @@ export default function TelaCadastro() {
             <LogoBox>
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
-            <Form onSubmit={cadastrar}>
-                <Input required placeholder='email' type='email' disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} ></Input>
-                <Input required placeholder='senha' type='password' disabled={disabled} value={senha} onChange={e => setSenha(e.target.value)} ></Input>
-                <Input required placeholder='nome' type='text' disabled={disabled} value={nome} onChange={e => setNome(e.target.value)} ></Input>
+            <Form onSubmit={cadastrar} autoComplete='on'>
+                <Input required placeholder='email' type='email' autoComplete='email' disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} ></Input>
+                <Input required placeholder='senha' type='password' autoComplete='new-password' disabled={disabled} value={senha} onChange={e => setSenha(e.target.value)} ></Input>
+                <Input required placeholder='nome' type='text' autoComplete='username' disabled={disabled} value={nome} onChange={e => setNome(e.target.value)} ></Input>
                 <Input required placeholder='foto' type='url' disabled={disabled} value={foto} onChange={e => setFoto(e.target.value)}></Input>
                 <Button disabled={disabled} type='submit'>Cadastrar</Button>
             </Form>

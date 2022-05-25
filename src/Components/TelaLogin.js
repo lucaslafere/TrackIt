@@ -1,24 +1,55 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import logo from '../Assets/logo.png'
 
 export default function TelaLogin() {
     const [disabled, setDisabled] = useState(false);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [token, setToken] = useState("");
+
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login";
+    const navigate = useNavigate();
+    const body = {
+        email,
+        password: senha
+    }
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
 
 
+    function entrar (event) {
+        event.preventDefault();
+        setDisabled(true);
+        // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
 
+        const request = axios.post(URL, body);
+        request
+        .then((res) => {
+            console.log("Login feito com sucesso");
+            setToken(res.data.token);
+            navigate("/hoje");
+        })
+        .catch(err => {
+            alert(err);
+            setDisabled(false);
+        })
+    }
 
     return (
         <Container>
             <LogoBox>
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
-            <Form>
-                <Input placeholder='email' type='email' disabled={disabled}></Input>
-                <Input placeholder='senha' type='password' disabled={disabled}></Input>
+            <Form onSubmit={entrar}>
+                <Input placeholder='email' type='email' autoComplete='email' disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} ></Input>
+                <Input placeholder='senha' type='password' autoComplete='current-password' disabled={disabled} value={senha} onChange={e => setSenha(e.target.value)} ></Input>
                 <Button disabled={disabled} type='submit'>Entrar</Button>
             </Form>
             <Link to={`/cadastro`}>
