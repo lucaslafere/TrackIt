@@ -15,6 +15,13 @@ export default TelaCadastro() {
             <LogoBox>
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
+            <Form>
+                <label></label>
+                <Input></Input>
+                <label></label>
+                <Input></Input>
+                <Button></Button>
+            </Form>
         </Container>
     )
 }
@@ -26,3 +33,7 @@ const Container = styled.div`
 const LogoBox = styled.div`
 
 `
+
+const Form = styled.form`
+
+` 
