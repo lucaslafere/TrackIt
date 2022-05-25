@@ -6,6 +6,9 @@ import logo from '../Assets/logo.png'
 
 export default function TelaLogin() {
     const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false)
+
+
 
 
     return (
@@ -14,9 +17,9 @@ export default function TelaLogin() {
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
             <Form>
-                <Input placeholder='email' disabled={disabled}></Input>
-                <Input placeholder='senha' disabled={disabled}></Input>
-                <Button disabled={disabled} onClick={setDisabled}>Entrar</Button>
+                <Input placeholder='email' type='email' disabled={disabled}></Input>
+                <Input placeholder='senha' type='password' disabled={disabled}></Input>
+                <Button disabled={disabled} type='submit'>Entrar</Button>
             </Form>
             <Link to={`/cadastro`}>
             <TextLink>Não tem uma conta? Cadastre-se!</TextLink>
