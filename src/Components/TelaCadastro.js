@@ -12,7 +12,7 @@ import { Input } from './TelaLogin';
 
 
 export default function TelaCadastro() {
-    const [disabled, setDisabled] = useEffect(false);
+    const [disabled, setDisabled] = useState(false);
 
 
 

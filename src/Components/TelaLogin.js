@@ -18,7 +18,9 @@ export default function TelaLogin() {
                 <Input placeholder='senha' disabled={disabled}></Input>
                 <Button disabled={disabled} onClick={setDisabled}>Entrar</Button>
             </Form>
+            <Link to={`/cadastro`}>
             <TextLink>Não tem uma conta? Cadastre-se!</TextLink>
+            </Link>
         </Container>
     )
 }
@@ -91,5 +93,6 @@ padding: 10px;
 ::placeholder{
     font-size: 20px;
     color: ${props => props.disabled ? '#AFAFAF;' :'#DBDBDB'};
-} `
+} 
+`
 export { Input }
