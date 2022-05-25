@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import logo from '../Assets/logo.png'
+import logo from '../Assets/logo.png';
 
 export default function TelaLogin() {
     const [disabled, setDisabled] = useState(false);
@@ -72,7 +72,7 @@ align-items: center;
 flex-direction: column;
 height: 80vh;
 `
-export { Container }
+export { Container };
 
 const LogoBox = styled.div`
 
@@ -82,7 +82,7 @@ img {
     height: 180px;
 }
 `
-export { LogoBox }
+export { LogoBox };
 
 const Form = styled.form`
 display: flex;
@@ -93,7 +93,7 @@ margin-top: 32px;
 margin-bottom: 26px;
 gap: 6px;
 `
-export { Form }
+export { Form };
 
 const Button = styled.button`
 width: 90%;
@@ -109,7 +109,7 @@ color: #FFFFFF;
 font-family: 'Lexend Deca';
 font-style: normal;
 `
-export { Button }
+export { Button };
 
 const TextLink = styled.div`
 text-decoration: underline;
@@ -118,7 +118,7 @@ color: #52B6FF;
 font-family: 'Lexend Deca';
 font-style: normal;
 `
-export { TextLink }
+export { TextLink };
 
 
 const Input = styled.input`
@@ -137,4 +137,4 @@ opacity: ${props => props.disabled ? 0.7 : 1};
     font-style: normal;
 } 
 `
-export { Input }
+export { Input };
