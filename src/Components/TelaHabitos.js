@@ -35,7 +35,7 @@ export default function TelaHabitos() {
 
     //Funçoes de get habitos e post novo habito
     function buscarHabitos() {
-        const promise = axios.get(URL, null, config)
+        const promise = axios.get(URL, config)
         promise
             .then((res) => {
                 console.log("Listando habitos do usuario");
@@ -44,6 +44,7 @@ export default function TelaHabitos() {
             })
             .catch(err => {
                 alert(err);
+                console.log(err.status)
             })
     }
 
@@ -86,6 +87,7 @@ export default function TelaHabitos() {
     function criarHabito() {
 
         //buttondays terá que ser gerado por um Map (array) pra cada um ter seu proprio estado
+        //SaveButton precisa de um loading quando disabled
         if (openForm)
         return (
             <ContainerNovoHabito>
@@ -105,7 +107,8 @@ export default function TelaHabitos() {
                     <ButtonDays selected={selected} disabled={disabled}>S</ButtonDays>
                 </ContainerDays>
                 <ContainerCreate>
-                    <TextLink>Cancelar</TextLink>
+                    <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
+                    {/* Esse botao de salvar precisa de um loading quando disabled*/}
                     <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
                 </ContainerCreate>
             </ContainerNovoHabito>
@@ -117,7 +120,7 @@ export default function TelaHabitos() {
     }
 
     //Render
-        // useEffect(() => buscarHabitos(), []);
+        useEffect(() => buscarHabitos(), []);
         const TelaHabitos = montarTelaHabitos();
         const AbrirNovoHabito = criarHabito ();
     return (
