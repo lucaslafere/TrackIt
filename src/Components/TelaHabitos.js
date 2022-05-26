@@ -7,18 +7,21 @@ import FooterMenu from "./shared/FooterMenu";
 import TokenContext from '../contexts/TokenContext';
 
 export default function TelaHabitos() {
+    //Enviados pra API pra criar habito novo
     const [nomeHabitoNovo, setNomeHabitoNovo] = useState("");
     const [diasHabitoNovo, setDiasHabitoNovo] = useState([]);
 
+    //Estados de loading, disabled dos campos, dia selecionado (será movido daqui), abrir caixa de novo hábito
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const [selected, setSelected] = useState(false);
     const [openForm, setOpenForm] = useState(false);
+    const [selected, setSelected] = useState(false);
+
+
+    //Dados envolvendo API (get.data dos habitos, enviar token, URL da API, body. config (header token))
 
     const [dataHabitos, setDataHabitos] = useState([]);
-
     const { token } = useContext(TokenContext);
-
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
     const body = {
         name: nomeHabitoNovo,
@@ -30,6 +33,7 @@ export default function TelaHabitos() {
         }
     }
 
+    //Funçoes de get habitos e post novo habito
     function buscarHabitos() {
         const promise = axios.get(URL, null, config)
         promise
@@ -42,7 +46,6 @@ export default function TelaHabitos() {
                 alert(err);
             })
     }
-
 
     function enviarHabitoNovo() {
         setLoading(true);
@@ -78,11 +81,11 @@ export default function TelaHabitos() {
             // return dataHabitos.map((el, index) => <Habito/>)
         }
     }
-    const TelaHabitos = montarTelaHabitos();
-    const AbrirNovoHabito = criarHabito ();
 
-    //funcao incompleta, falta selecionar os dias 
+    //funcao incompleta, falta selecionar os dias. Caixa de criar novo hábito fica aqui
     function criarHabito() {
+
+        //buttondays terá que ser gerado por um Map (array) pra cada um ter seu proprio estado
         if (openForm)
         return (
             <ContainerNovoHabito>
@@ -93,7 +96,7 @@ export default function TelaHabitos() {
                     value={nomeHabitoNovo}
                     onChange={e => setNomeHabitoNovo(e.target.value)} />
                 <ContainerDays>
-                    <ButtonDays selected={selected} disabled={disabled} >D</ButtonDays>
+                    <ButtonDays selected={selected} disabled={disabled}>D</ButtonDays>
                     <ButtonDays selected={selected} disabled={disabled}>S</ButtonDays>
                     <ButtonDays selected={selected} disabled={disabled}>T</ButtonDays>
                     <ButtonDays selected={selected} disabled={disabled}>Q</ButtonDays>
@@ -109,9 +112,14 @@ export default function TelaHabitos() {
         )
     }
 
-    // useEffect(() => buscarHabitos(), []);
+    //funcao nova de selecionar dia, totalmente incompleta, vai ser colocada dentro do componente ButtonDays:
+    function selecionarDia () {
+    }
 
     //Render
+        // useEffect(() => buscarHabitos(), []);
+        const TelaHabitos = montarTelaHabitos();
+        const AbrirNovoHabito = criarHabito ();
     return (
         <>
             <Header />
