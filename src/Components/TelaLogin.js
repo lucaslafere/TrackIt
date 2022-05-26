@@ -93,8 +93,6 @@ height: 80vh;
 export { Container };
 
 const LogoBox = styled.div`
-
-
 img {
     width: 180px;
     height: 180px;
@@ -142,12 +140,19 @@ export { TextLink };
 const Input = styled.input`
 width: 90%;
 height: 45px;
+
 border-radius: 8px;
-background-color: ${props => props.disabled ? '#F2F2F2' : '#FFFFFF'};
 border: 1px solid #D5D5D5;
 padding: 10px;
-opacity: ${props => props.disabled ? 0.7 : 1};
 
+opacity: ${props => props.disabled ? 0.7 : 1};
+background-color: ${props => props.disabled ? '#F2F2F2' : '#FFFFFF'};
+
+color: #666666;
+font-size: 20px;
+font-family: 'Lexend Deca';
+font-style: normal;
+font-weight: 400;
 ::placeholder{
     font-size: 20px;
     color: ${props => props.disabled ? '#AFAFAF;' : '#DBDBDB'};

@@ -22,6 +22,7 @@ position: fixed;
 bottom: 0px;
 left: 0px;
 background-color: #FFFFFF;
+z-index: 1;
 `
 
 const TextLink = styled.div`
