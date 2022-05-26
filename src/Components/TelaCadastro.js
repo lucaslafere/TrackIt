@@ -23,24 +23,24 @@ export default function TelaCadastro() {
         password: senha,
     }
 
-    function cadastrar (event) {
+    function cadastrar(event) {
         event.preventDefault();
         setDisabled(true)
         setLoading(true);
-    // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
+        // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
 
 
         const request = axios.post(URL, body);
         request
-        .then(() => {
-            console.log("Cadastro feito com sucesso");
-            setLoading(false);
-            navigate("/");
-        })
-        .catch(err => {
-            alert(err);
-            setDisabled(false);
-        })
+            .then(() => {
+                console.log("Cadastro feito com sucesso");
+                setLoading(false);
+                navigate("/");
+            })
+            .catch(err => {
+                alert(err);
+                setDisabled(false);
+            })
     }
 
     return (
@@ -49,14 +49,41 @@ export default function TelaCadastro() {
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
             <Form onSubmit={cadastrar} autoComplete='on'>
-                <Input required placeholder='email' type='email' autoComplete='email' disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} ></Input>
-                <Input required placeholder='senha' type='password' autoComplete='new-password' disabled={disabled} value={senha} onChange={e => setSenha(e.target.value)} ></Input>
-                <Input required placeholder='nome' type='text' autoComplete='username' disabled={disabled} value={nome} onChange={e => setNome(e.target.value)} ></Input>
-                <Input required placeholder='foto' type='url' disabled={disabled} value={foto} onChange={e => setFoto(e.target.value)}></Input>
+                <Input
+                    required
+                    placeholder='email'
+                    type='email'
+                    autoComplete='email'
+                    disabled={disabled}
+                    value={email}
+                    onChange={e => setEmail(e.target.value)} />
+                <Input
+                    required
+                    placeholder='senha'
+                    type='password'
+                    autoComplete='new-password'
+                    disabled={disabled}
+                    value={senha}
+                    onChange={e => setSenha(e.target.value)} />
+                <Input
+                    required
+                    placeholder='nome'
+                    type='text'
+                    autoComplete='username'
+                    disabled={disabled}
+                    value={nome}
+                    onChange={e => setNome(e.target.value)} />
+                <Input
+                    required
+                    placeholder='foto'
+                    type='url'
+                    disabled={disabled}
+                    value={foto}
+                    onChange={e => setFoto(e.target.value)} />
                 <Button disabled={disabled} type='submit'>Cadastrar</Button>
             </Form>
             <Link to="/">
-            <TextLink>Já tem uma conta? Faça login!</TextLink>
+                <TextLink>Já tem uma conta? Faça login!</TextLink>
             </Link>
         </Container>
     )

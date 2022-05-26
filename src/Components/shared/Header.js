@@ -1,13 +1,16 @@
 import styled from "styled-components";
+import { useContext } from "react";
 import logo from "../../Assets/trackIt-logo-pequena.svg";
-import placeholder from "../../Assets/placeholder-cow.jpg"
+import ImageContext from "../../contexts/ImageContext";
 
 export default function Header () {
+    const { image } = useContext(ImageContext);
+
     return (
         <HeaderContainer>
             <img src={logo} alt="" />
             <UserImg>
-                <img src={placeholder} alt="" />
+                <img src={image} alt="" />
             </UserImg>
         </HeaderContainer>
     )
@@ -16,7 +19,7 @@ export default function Header () {
 const HeaderContainer = styled.div`
 width: 100%;
 height: 70px;
-background: #126BA5;
+background-color: #126BA5;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
 display: flex;
 justify-content: space-between;
@@ -25,6 +28,7 @@ position: fixed;
 top: 0px;
 left: 0px;
 padding: 1rem;
+z-index: 1;
 `
 const UserImg = styled.div`
 img {

@@ -1,18 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import logo from '../Assets/logo.png';
+import TokenContext from '../contexts/TokenContext';
+import ImageContext from '../contexts/ImageContext';
 
 export default function TelaLogin() {
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [token, setToken] = useState("");
-
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login";
     const navigate = useNavigate();
+    const { token, setToken } = useContext(TokenContext);
+    const { setImage } = useContext(ImageContext);
+
     const body = {
         email,
         password: senha
@@ -24,7 +27,7 @@ export default function TelaLogin() {
     }
 
 
-    function entrar (event) {
+    function entrar(event) {
         event.preventDefault();
         setDisabled(true);
         setLoading(true);
@@ -32,16 +35,17 @@ export default function TelaLogin() {
 
         const request = axios.post(URL, body);
         request
-        .then((res) => {
-            console.log("Login feito com sucesso");
-            setToken(res.data.token);
-            setLoading(false);
-            navigate("/hoje");
-        })
-        .catch(err => {
-            alert(err);
-            setDisabled(false);
-        })
+            .then((res) => {
+                console.log("Login feito com sucesso");
+                setToken(res.data.token);
+                setImage(res.data.image);
+                setLoading(false);
+                navigate("/hoje");
+            })
+            .catch(err => {
+                alert(err);
+                setDisabled(false);
+            })
     }
 
     return (
@@ -50,12 +54,26 @@ export default function TelaLogin() {
                 <img src={logo} alt="logo trackit" />
             </LogoBox>
             <Form onSubmit={entrar}>
-                <Input placeholder='email' type='email' autoComplete='email' disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} ></Input>
-                <Input placeholder='senha' type='password' autoComplete='current-password' disabled={disabled} value={senha} onChange={e => setSenha(e.target.value)} ></Input>
-                <Button disabled={disabled} type='submit'>Entrar</Button>
+                <Input
+                    placeholder='email'
+                    type='email'
+                    autoComplete='email'
+                    disabled={disabled}
+                    value={email}
+                    onChange={e => setEmail(e.target.value)} />
+                <Input
+                    placeholder='senha'
+                    type='password'
+                    autoComplete='current-password'
+                    disabled={disabled}
+                    value={senha}
+                    onChange={e => setSenha(e.target.value)} />
+                <Button
+                    disabled={disabled}
+                    type='submit'>Entrar</Button>
             </Form>
             <Link to={`/cadastro`}>
-            <TextLink>Não tem uma conta? Cadastre-se!</TextLink>
+                <TextLink>Não tem uma conta? Cadastre-se!</TextLink>
             </Link>
         </Container>
     )
@@ -132,7 +150,7 @@ opacity: ${props => props.disabled ? 0.7 : 1};
 
 ::placeholder{
     font-size: 20px;
-    color: ${props => props.disabled ? '#AFAFAF;' :'#DBDBDB'};
+    color: ${props => props.disabled ? '#AFAFAF;' : '#DBDBDB'};
     font-family: 'Lexend Deca';
     font-style: normal;
 } 
