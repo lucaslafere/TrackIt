@@ -92,7 +92,7 @@ export default function TelaHabitos() {
                 )
             }
             else {
-                return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} selectedDays={el.days} />)
+                return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} day0={el.days[0]} day1={el.days[1]} day2={el.days[2]} day3={el.days[3]} day4={el.days[4]} day5={el.days[5]} day6={el.days[6]} />)
             }
         }
 
@@ -164,14 +164,43 @@ function ButtonDays({ disabled, id, text, dias, setDias }) {
     )
 }
 
-function Habito ({id, name, selectedDays}) {
+function Habito ({id, name, day0, day1, day2, day3, day4, day5, day6}) {
     const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
+
+    
     return (
         <ContainerHabitos>
             <ion-icon name="trash-outline"></ion-icon>
             <NomeHabito>{name}</NomeHabito>
             <ContainerDays>
-                {arrDias.map((dia, index) => <Days key={index} index={index} days={selectedDays}>{dia}</Days>)}
+                {arrDias.map((dia, index) => 
+                {
+                        if (index === day0) {
+                            return <Days key={index} index={index} selected={true} >{dia}</Days>
+                        }
+                        else if (index === day1) {
+                            return <Days key={index} index={index} selected={true} >{dia}</Days>
+                        }
+                        else if (index === day2) {
+                            return <Days key={index} index={index} selected={true} >{dia}</Days>
+                        }
+                        else if (index === day3) {
+                            return <Days key={index} index={index} selected={true} >{dia}</Days>
+                        }
+                        else if (index === day4) {
+                            return <Days key={index} index={index} selected={true} >{dia}</Days>
+                        }
+                        else if (index === day5) {
+                            return <Days key={index} index={index} selected={true} >{dia}</Days>
+                        }
+                        else if (index === day6) {
+                            return <Days key={index} index={index} selected={true} >{dia}</Days>
+                        }
+                        return <Days key={index} index={index} selected={false}>{dia}</Days>})
+                    }
+                
+                
+                
             </ContainerDays>
         </ContainerHabitos>
     )
