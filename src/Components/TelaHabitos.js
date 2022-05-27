@@ -171,7 +171,7 @@ function Habito ({id, name, selectedDays}) {
             <ion-icon name="trash-outline"></ion-icon>
             <NomeHabito>{name}</NomeHabito>
             <ContainerDays>
-                {arrDias.map((dia, index) => <Days key={index} >{dia}</Days>)}
+                {arrDias.map((dia, index) => <Days key={index} index={index} days={selectedDays}>{dia}</Days>)}
             </ContainerDays>
         </ContainerHabitos>
     )
@@ -182,7 +182,6 @@ height: 100%;
 width: 100%;
 background-color: #F2F2F2;
 padding: 1rem;
-
 `
 const TitleContainer = styled.div`
 width: 100%;
@@ -263,7 +262,6 @@ const ContainerDays = styled.div`
 display: flex;
 gap: 4px;
 `
-
 const Days = styled.button`
 width: 2rem;
 height: 2rem;
@@ -277,7 +275,6 @@ font-style: normal;
 font-weight: 400;
 font-size: 20px;
 color: ${props => props.selected ? "#FFFFFF" : "#DBDBDB"};
-
 `
 const ContainerCreate = styled.div`
 display: flex;
@@ -286,7 +283,6 @@ align-items: center;
 gap: 24px;
 margin-top: 20px;
 `
-
 const TextLink = styled.div`
 font-family: 'Lexend Deca';
 font-style: normal;
@@ -331,7 +327,6 @@ position: relative;
     margin-bottom: 80px;
 }
 `
-
 const NomeHabito = styled.div`
 width: 90%;
 font-family: 'Lexend Deca';
