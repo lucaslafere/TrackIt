@@ -22,10 +22,12 @@ export default function TelaHoje() {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
 
     const [dataHabitos, setDataHabitos] = useState([]);
+    const [feito, setFeito] = useState(false);
 
-    const now = dayjs().locale('pt-br').format('dddd');
-    const diaCerto = now.charAt(0).toUpperCase() + now.slice(1);
-    const date = dayjs().locale('pt-br').format('DD/MM')
+    // dayjs
+        const now = dayjs().locale('pt-br').format('dddd');
+        const diaCerto = now.charAt(0).toUpperCase() + now.slice(1);
+        const date = dayjs().locale('pt-br').format('DD/MM')
 
 
 
@@ -54,19 +56,27 @@ export default function TelaHoje() {
             )
         }
         else {
-            return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} done={el.done} currentSequence={el.currentSequence} highestSequence={el.highestSequence} />)
+            return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} done={el.done} currentSequence={el.currentSequence} highestSequence={el.highestSequence}/>)
         }
     }
     // Render
     useEffect(() => buscarHabitos(), []);
     const TelaHabitos = montarTelaHabitos();
+
+    const concluidos = (progress.length / dataHabitos.length) * 100;
+    const concluidosAproximado = Math.round(concluidos);
+
+    if (progress.length > 0) {
+        setFeito(true)
+    }
+
     return (
         <>
             <Header />
             <Container>
-                <TitleContainer>
+                <TitleContainer feito={feito}>
                     <h1>{diaCerto}, {date}</h1>
-                    <p>Placeholder hábitos concluídos</p>
+                    <p>{feito ? `${concluidosAproximado}% dos hábitos concluídos` : `Nenhum hábito concluído ainda`}</p>
                 </TitleContainer>
                 {TelaHabitos}
             </Container>
@@ -81,7 +91,7 @@ function Habito({ id, name, done, currentSequence, highestSequence }) {
         {highestSequence === currentSequence & currentSequence > 0 ? setRecorde(true) : setRecorde(false)}
     }
     useEffect(() => testarRecorde(), []);
-        
+
     return (
         <ContainerHabitos>
             <TextoHabitos>
@@ -121,7 +131,7 @@ align-items: flex-start;
     font-style: normal;
     font-weight: 400;
     font-size: 1rem;
-    color: #BABABA;
+    color: ${props => props.feito ? "#8FC549" : "#BABABA"};
     }
 `
 const NenhumHabito = styled.div`
@@ -171,7 +181,7 @@ const SequenciaAtual = styled.div`
     font-style: normal;
     font-weight: 400;
     font-size: 0.8rem;
-    color: "#666666";
+    color: #666666;
     margin-bottom: 4px;
     span {
     color: ${props => props.done || props.recorde ? "#8FC549" : "#666666"};
