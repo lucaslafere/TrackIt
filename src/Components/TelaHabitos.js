@@ -11,11 +11,10 @@ export default function TelaHabitos() {
     const [nomeHabitoNovo, setNomeHabitoNovo] = useState("");
     const [diasHabitoNovo, setDiasHabitoNovo] = useState([]);
 
-    //Estados de loading, disabled dos campos, dia selecionado (será movido daqui), abrir caixa de novo hábito
+    //Estados de loading, disabled dos campos, abrir caixa de novo hábito
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [openForm, setOpenForm] = useState(false);
-    const [selected, setSelected] = useState(false);
 
 
     //Dados envolvendo API (get.data dos habitos, enviar token, URL da API, body. config (header token))
@@ -57,7 +56,7 @@ export default function TelaHabitos() {
             .then((res) => {
                 console.log("Hábito criado com sucesso");
                 setNomeHabitoNovo("");
-                setDiasHabitoNovo("");
+                setDiasHabitoNovo([]);
                 setLoading(false);
                 setDisabled(false);
                 setOpenForm(false);
@@ -84,7 +83,9 @@ export default function TelaHabitos() {
     }
 
     //funcao incompleta, falta selecionar os dias. Caixa de criar novo hábito fica aqui
-    function criarHabito() {
+    const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
+
+    function criarHabito(diasHabitoNovo, setDiasHabitoNovo) {
 
         //buttondays terá que ser gerado por um Map (array) pra cada um ter seu proprio estado
         //SaveButton precisa de um loading quando disabled
@@ -98,13 +99,7 @@ export default function TelaHabitos() {
                     value={nomeHabitoNovo}
                     onChange={e => setNomeHabitoNovo(e.target.value)} />
                 <ContainerDays>
-                    <ButtonDays selected={selected} disabled={disabled}>D</ButtonDays>
-                    <ButtonDays selected={selected} disabled={disabled}>S</ButtonDays>
-                    <ButtonDays selected={selected} disabled={disabled}>T</ButtonDays>
-                    <ButtonDays selected={selected} disabled={disabled}>Q</ButtonDays>
-                    <ButtonDays selected={selected} disabled={disabled}>Q</ButtonDays>
-                    <ButtonDays selected={selected} disabled={disabled}>S</ButtonDays>
-                    <ButtonDays selected={selected} disabled={disabled}>S</ButtonDays>
+                    {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} index={index + 1} text={dia} diasHabitoNovo={diasHabitoNovo} setDiasHabitoNovo={setDiasHabitoNovo} />)}
                 </ContainerDays>
                 <ContainerCreate>
                     <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
@@ -113,6 +108,33 @@ export default function TelaHabitos() {
                 </ContainerCreate>
             </ContainerNovoHabito>
         )
+    }
+
+    function ButtonDays ({disabled, index, text, diasHabitoNovo, setDiasHabitoNovo}) {
+        const [selected, setSelected] = useState(false);
+        console.log(diasHabitoNovo)
+
+        return (
+            <Days selected={selected} disabled={disabled} onClick={selecionar}>{text}</Days>
+        )
+
+
+        function selecionar () {
+            if (!selected){
+                
+                setSelected(true);
+                setDiasHabitoNovo([...diasHabitoNovo, index]);
+                console.log("selecionei")
+                
+                console.log(selected)
+            }
+            else {
+                setSelected(false);
+                setDiasHabitoNovo(diasHabitoNovo.filter((habito, i) => i !== index))
+                console.log("desselecionei")
+
+            }
+        }
     }
 
     //funcao nova de selecionar dia, totalmente incompleta, vai ser colocada dentro do componente ButtonDays:
@@ -226,7 +248,7 @@ display: flex;
 gap: 4px;
 `
 
-const ButtonDays = styled.button`
+const Days = styled.button`
 width: 2rem;
 height: 2rem;
 
