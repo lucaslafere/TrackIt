@@ -33,81 +33,83 @@ export default function TelaHabitos() {
     }
 
     //Funçoes de get habitos e post novo habito
-    function buscarHabitos() {
-        const promise = axios.get(URL, config)
-        promise
-            .then((res) => {
-                console.log("Listando habitos do usuario");
-                console.log(res.data)
-                setDataHabitos(res.data)
-            })
-            .catch(err => {
-                alert(err);
-                console.log(err.status)
-            })
-    }
+        function buscarHabitos() {
+            const promise = axios.get(URL, config)
+            promise
+                .then((res) => {
+                    console.log("Listando habitos do usuario");
+                    console.log(res.data)
+                    setDataHabitos(res.data)
+                })
+                .catch(err => {
+                    alert(err);
+                    console.log(err.status)
+                })
+        }
 
-    function enviarHabitoNovo() {
-        setLoading(true);
-        setDisabled(true);
 
-        const request = axios.post(URL, body, config);
-        request
-            .then((res) => {
-                console.log("Hábito criado com sucesso");
-                setNomeHabitoNovo("");
-                setDias([]);
-                setLoading(false);
-                setDisabled(false);
-                setOpenForm(false);
-                buscarHabitos();
-            })
-            .catch(err => {
-                alert(err);
-                setDisabled(false);
-            })
-    }
+        //falta loading
+        function enviarHabitoNovo() {
+            setLoading(true);
+            setDisabled(true);
+
+            const request = axios.post(URL, body, config);
+            request
+                .then((res) => {
+                    console.log("Hábito criado com sucesso");
+                    setNomeHabitoNovo("");
+                    setDias([]);
+                    setLoading(false);
+                    setDisabled(false);
+                    setOpenForm(false);
+                    buscarHabitos();
+                })
+                .catch(err => {
+                    alert(err);
+                    setDisabled(false);
+                })
+        }
 
 
     // essa funçao abaixo nao está completa, o map de habitos fica aqui
-    function montarTelaHabitos() {
-        if (dataHabitos.length === 0) {
-            return (
-                <NenhumHabito>Você não tem nenhum hábito <br />
-                    cadastrado ainda. Adicione um hábito para começar a trackear!</NenhumHabito>
-            )
+        function montarTelaHabitos() {
+            if (dataHabitos.length === 0) {
+                return (
+                    <NenhumHabito>Você não tem nenhum hábito <br />
+                        cadastrado ainda. Adicione um hábito para começar a trackear!</NenhumHabito>
+                )
+            }
+            else {
+                // return dataHabitos.map((el, index) => <Habito/>)
+            }
         }
-        else {
-            // return dataHabitos.map((el, index) => <Habito/>)
-        }
-    }
 
     //Falta loading no savebutton, caixa de criar novo hábito fica aqui
-    const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
+        const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
 
-    function criarHabito() {
+        function criarHabito() {
 
-        //SaveButton precisa de um loading quando disabled
-        if (openForm)
-            return (
-                <ContainerNovoHabito>
-                    <Input
-                        placeholder='nome do hábito'
-                        type='name'
-                        disabled={disabled}
-                        value={nomeHabitoNovo}
-                        onChange={e => setNomeHabitoNovo(e.target.value)} />
-                    <ContainerDays>
-                        {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} id={index} text={dia} dias={dias} setDias={setDias} />)}
-                    </ContainerDays>
-                    <ContainerCreate>
-                        <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
-                        {/* Esse botao de salvar precisa de um loading quando disabled*/}
-                        <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
-                    </ContainerCreate>
-                </ContainerNovoHabito>
-            )
-    }
+            //SaveButton precisa de um loading quando disabled
+            if (openForm)
+                return (
+                    <ContainerNovoHabito>
+                        <Input
+                            placeholder='nome do hábito'
+                            type='name'
+                            disabled={disabled}
+                            value={nomeHabitoNovo}
+                            onChange={e => setNomeHabitoNovo(e.target.value)} />
+                        <ContainerDays>
+                            {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} id={index} text={dia} dias={dias} setDias={setDias} />)}
+                        </ContainerDays>
+                        <ContainerCreate>
+                            <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
+                            {/* Esse botao de salvar precisa de um loading quando disabled*/}
+                            <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
+                        </ContainerCreate>
+                    </ContainerNovoHabito>
+                )
+        }
 
 
     //Render
