@@ -2,12 +2,16 @@ import { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+
 import Header from "./shared/Header";
 import FooterMenu from "./shared/FooterMenu";
 import TokenContext from '../contexts/TokenContext';
 import ProgressContext from '../contexts/ProgressContext';
 
 export default function TelaHoje() {
+    //Variaveis de estado, const, etc
     const { progress, setProgress } = useContext(ProgressContext);
     const { token } = useContext(TokenContext);
     const config = {
@@ -18,6 +22,16 @@ export default function TelaHoje() {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
 
     const [dataHabitos, setDataHabitos] = useState([]);
+
+    const now = dayjs().locale('pt-br').format('dddd');
+    const diaCerto = now.charAt(0).toUpperCase() + now.slice(1);
+    const date = dayjs().locale('pt-br').format('DD/MM')
+
+
+
+
+// Logica, funçoes
+
 
     function buscarHabitos() {
         const promise = axios.get(URL, config)
@@ -51,7 +65,7 @@ export default function TelaHoje() {
             <Header />
             <Container>
                 <TitleContainer>
-                    <h1>Placeholder day.js</h1>
+                    <h1>{diaCerto}, {date}</h1>
                     <p>Placeholder hábitos concluídos</p>
                 </TitleContainer>
                 {TelaHabitos}
@@ -67,7 +81,6 @@ function Habito({ id, name, done, currentSequence, highestSequence }) {
         {highestSequence === currentSequence & currentSequence > 0 ? setRecorde(true) : setRecorde(false)}
     }
     useEffect(() => testarRecorde(), []);
-    console.log(recorde);
         
     return (
         <ContainerHabitos>
