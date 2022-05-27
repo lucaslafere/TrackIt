@@ -21,7 +21,7 @@ export default function TelaHoje() {
 
     function buscarHabitos() {
         const promise = axios.get(URL, config)
-        promise 
+        promise
             .then((res) => {
                 console.log("Listando hábitos de hoje");
                 console.log(res.data);
@@ -33,7 +33,7 @@ export default function TelaHoje() {
             })
     }
 
-    function montarTelaHabitos () {
+    function montarTelaHabitos() {
         if (dataHabitos.length === 0) {
             return (
                 <NenhumHabito>Você não tem nenhum hábito hoje</NenhumHabito>
@@ -48,7 +48,7 @@ export default function TelaHoje() {
     const TelaHabitos = montarTelaHabitos();
     return (
         <>
-            <Header/>
+            <Header />
             <Container>
                 <TitleContainer>
                     <h1>Placeholder day.js</h1>
@@ -56,21 +56,28 @@ export default function TelaHoje() {
                 </TitleContainer>
                 {TelaHabitos}
             </Container>
-            <FooterMenu/>
+            <FooterMenu />
         </>
     )
 }
 
-function Habito ({id, name, done, currentSequence, highestSequence}) {
+function Habito({ id, name, done, currentSequence, highestSequence }) {
+    const [recorde, setRecorde] = useState(false);
+    function testarRecorde () {
+        {highestSequence === currentSequence & currentSequence > 0 ? setRecorde(true) : setRecorde(false)}
+    }
+    useEffect(() => testarRecorde(), []);
+    console.log(recorde);
+        
     return (
-        <ContainerHabito>
-            <Textohabito>
-                <h1>{name}</h1>
-                <p>Sequência atual: {currentSequence} dias</p>
-                <p>Seu recorde: {highestSequence} dias</p>
-            </Textohabito>
-            <ion-icon name="checkbox"></ion-icon>
-        </ContainerHabito>
+        <ContainerHabitos>
+            <TextoHabitos>
+                <h2>{name}</h2>
+                <SequenciaAtual done={done} recorde={recorde}>Sequência atual: <span>{currentSequence} dias</span></SequenciaAtual>
+                <SeuRecorde recorde={recorde}>Seu recorde: <span>{highestSequence} dias</span></SeuRecorde>
+            </TextoHabitos>
+            <ion-icon name="checkbox" done={done}></ion-icon>
+        </ContainerHabitos>
     )
 }
 
@@ -113,16 +120,58 @@ line-height: 22px;
 color: #666666;
 
 `
-const ContainerHabito = styled.div`
+const ContainerHabitos = styled.div`
 width: 100%;
-min-height: 90px;
+min-height: 94px;
+padding: 0.8rem;
 background-color: #FFFFFF;
 border-radius: 6px;
-padding: 1rem;
+margin-bottom: 2rem;
+
 display: flex;
 justify-content: space-between;
-align-items: center;
-`
-const Textohabito = styled.div`
 
+    ion-icon {
+        color: ${props => props.done ? "#8FC549" : "#EBEBEB"};
+        font-size: 90px;
+    }
+    h2 {
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    color: #666666;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    }
+    &:last-child {
+    margin-bottom: 80px;
+}
+`
+const TextoHabitos = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+`
+const SequenciaAtual = styled.div`
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: "#666666";
+    margin-bottom: 4px;
+    span {
+    color: ${props => props.done || props.recorde ? "#8FC549" : "#666666"};
+    }
+
+`
+const SeuRecorde = styled.div`
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: #666666;
+    span {
+    color: ${props => props.recorde ? "#8FC549" : "#666666"};
+    }
 `
