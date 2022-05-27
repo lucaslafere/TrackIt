@@ -92,7 +92,7 @@ export default function TelaHabitos() {
                 )
             }
             else {
-                return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} day0={el.days[0]} day1={el.days[1]} day2={el.days[2]} day3={el.days[3]} day4={el.days[4]} day5={el.days[5]} day6={el.days[6]} />)
+                return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} day0={el.days[0]} day1={el.days[1]} day2={el.days[2]} day3={el.days[3]} day4={el.days[4]} day5={el.days[5]} day6={el.days[6]} setDataHabitos={setDataHabitos} />)
             }
         }
 
@@ -164,13 +164,42 @@ function ButtonDays({ disabled, id, text, dias, setDias }) {
     )
 }
 
-function Habito ({id, name, day0, day1, day2, day3, day4, day5, day6}) {
+function Habito ({id, name, day0, day1, day2, day3, day4, day5, day6, setDataHabitos}) {
     const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
+    const { token } = useContext(TokenContext);
 
-    
+    function apagarHabito () {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        if (window.confirm("Você deseja apagar esse hábito?") === true) {
+            const request = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, {data: {}, headers:{Authorization: `Bearer ${token}`}});
+            request
+                .then((res) => {
+                    console.log("Hábito deletado com sucesso!");
+                    const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+                    promise
+                        .then((res) => {
+                            console.log("Listando habitos do usuario");
+                            console.log(res.data)
+                            setDataHabitos(res.data)
+                        })
+                        .catch(err => {
+                            alert(err);
+                            console.log(err.status)
+                        });
+                } )
+                .catch((err) => console.log(err.status));
+        }
+    }
+
+
     return (
         <ContainerHabitos>
-            <ion-icon name="trash-outline"></ion-icon>
+            <ion-icon name="trash-outline" id={id} onClick={apagarHabito}></ion-icon>
             <NomeHabito>{name}</NomeHabito>
             <ContainerDays>
                 {arrDias.map((dia, index) => 
