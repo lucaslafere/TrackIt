@@ -56,13 +56,15 @@ export default function TelaHoje() {
             )
         }
         else {
-            return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} done={el.done} currentSequence={el.currentSequence} highestSequence={el.highestSequence}/>)
+            return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} done={el.done} currentSequence={el.currentSequence} highestSequence={el.highestSequence} setDataHabitos={setDataHabitos}/>)
         }
     }
     // Render
     useEffect(() => buscarHabitos(), []);
     const TelaHabitos = montarTelaHabitos();
 
+
+    //logica conclusao %
     const concluidos = (progress.length / dataHabitos.length) * 100;
     const concluidosAproximado = Math.round(concluidos);
 
@@ -85,10 +87,53 @@ export default function TelaHoje() {
     )
 }
 
-function Habito({ id, name, done, currentSequence, highestSequence }) {
+function Habito({ id, name, done, currentSequence, highestSequence, setDataHabitos }) {
     const [recorde, setRecorde] = useState(false);
+    const { token } = useContext(TokenContext);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
     function testarRecorde () {
-        {highestSequence === currentSequence & currentSequence > 0 ? setRecorde(true) : setRecorde(false)}
+        {highestSequence === currentSequence && currentSequence !== 0 ? setRecorde(true) : setRecorde(false)}
+        console.log("recorde testado")
+    }
+    function buscarHabitos() {
+        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
+        const promise = axios.get(URL, config)
+        promise
+            .then((res) => {
+                console.log("Listando hábitos de hoje");
+                console.log(res.data);
+                setDataHabitos(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+                console.log(err.status);
+            })
+    }
+    function habitoFeito () {
+        if (!done) {
+            const requisicao = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`,null, config );
+            requisicao
+                .then(() => {
+                    console.log("marcou");
+                    buscarHabitos()
+                    testarRecorde();
+                })
+                .catch((err) => console.log(err));
+        }
+        else {
+            const requisicao = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`,null, config);
+            requisicao
+                .then(() => {
+                    console.log("desmarcou")
+                    buscarHabitos()
+                    testarRecorde();
+                })
+                .catch((err) => console.log(err));
+        }
     }
     useEffect(() => testarRecorde(), []);
 
@@ -97,9 +142,9 @@ function Habito({ id, name, done, currentSequence, highestSequence }) {
             <TextoHabitos>
                 <h2>{name}</h2>
                 <SequenciaAtual done={done} recorde={recorde}>Sequência atual: <span>{currentSequence} dias</span></SequenciaAtual>
-                <SeuRecorde recorde={recorde}>Seu recorde: <span>{highestSequence} dias</span></SeuRecorde>
+                <SeuRecorde recorde={recorde} done={done}>Seu recorde: <span>{highestSequence} dias</span></SeuRecorde>
             </TextoHabitos>
-            <ion-icon name="checkbox" done={done}></ion-icon>
+            <ion-icon name="checkbox" done={done} onClick={habitoFeito}></ion-icon>
         </ContainerHabitos>
     )
 }
@@ -184,7 +229,7 @@ const SequenciaAtual = styled.div`
     color: #666666;
     margin-bottom: 4px;
     span {
-    color: ${props => props.done || props.recorde ? "#8FC549" : "#666666"};
+    color: ${props => props.done ? "#8FC549" : "#666666"};
     }
 
 `
@@ -195,6 +240,6 @@ const SeuRecorde = styled.div`
     font-size: 0.8rem;
     color: #666666;
     span {
-    color: ${props => props.recorde ? "#8FC549" : "#666666"};
+    color: ${props => props.recorde && props.done ? "#8FC549" : "#666666"};
     }
 `
