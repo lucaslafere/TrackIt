@@ -9,7 +9,7 @@ import TokenContext from '../contexts/TokenContext';
 export default function TelaHabitos() {
     //Enviados pra API pra criar habito novo
     const [nomeHabitoNovo, setNomeHabitoNovo] = useState("");
-    const [diasHabitoNovo, setDiasHabitoNovo] = useState([]);
+    const [dias, setDias] = useState([]);
 
     //Estados de loading, disabled dos campos, abrir caixa de novo hábito
     const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ export default function TelaHabitos() {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
     const body = {
         name: nomeHabitoNovo,
-        days: diasHabitoNovo
+        days: dias
     }
     const config = {
         headers: {
@@ -56,11 +56,11 @@ export default function TelaHabitos() {
             .then((res) => {
                 console.log("Hábito criado com sucesso");
                 setNomeHabitoNovo("");
-                setDiasHabitoNovo([]);
+                setDias([]);
                 setLoading(false);
                 setDisabled(false);
                 setOpenForm(false);
-                //carregar aqui a lista de habitos novamente (GET)
+                buscarHabitos();
             })
             .catch(err => {
                 alert(err);
@@ -85,9 +85,8 @@ export default function TelaHabitos() {
     //funcao incompleta, falta selecionar os dias. Caixa de criar novo hábito fica aqui
     const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
 
-    function criarHabito(diasHabitoNovo, setDiasHabitoNovo) {
+    function criarHabito() {
 
-        //buttondays terá que ser gerado por um Map (array) pra cada um ter seu proprio estado
         //SaveButton precisa de um loading quando disabled
         if (openForm)
         return (
@@ -99,7 +98,7 @@ export default function TelaHabitos() {
                     value={nomeHabitoNovo}
                     onChange={e => setNomeHabitoNovo(e.target.value)} />
                 <ContainerDays>
-                    {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} index={index + 1} text={dia} diasHabitoNovo={diasHabitoNovo} setDiasHabitoNovo={setDiasHabitoNovo} />)}
+                    {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} index={index} id={index+1} text={dia} dias={dias} setDias={setDias} />)}
                 </ContainerDays>
                 <ContainerCreate>
                     <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
@@ -110,32 +109,7 @@ export default function TelaHabitos() {
         )
     }
 
-    function ButtonDays ({disabled, index, text, diasHabitoNovo, setDiasHabitoNovo}) {
-        const [selected, setSelected] = useState(false);
-        console.log(diasHabitoNovo)
-
-        return (
-            <Days selected={selected} disabled={disabled} onClick={selecionar}>{text}</Days>
-        )
-
-
-        function selecionar () {
-            if (!selected){
-                
-                setSelected(true);
-                setDiasHabitoNovo([...diasHabitoNovo, index]);
-                console.log("selecionei")
-                
-                console.log(selected)
-            }
-            else {
-                setSelected(false);
-                setDiasHabitoNovo(diasHabitoNovo.filter((habito, i) => i !== index))
-                console.log("desselecionei")
-
-            }
-        }
-    }
+   
 
     //funcao nova de selecionar dia, totalmente incompleta, vai ser colocada dentro do componente ButtonDays:
     function selecionarDia () {
@@ -159,6 +133,32 @@ export default function TelaHabitos() {
             <FooterMenu />
         </>
     )
+}
+function ButtonDays ({disabled, id, text, dias, setDias}) {
+    const [selected, setSelected] = useState(false);
+
+    function selecionar () {
+        if (!selected){
+            setSelected(true);
+            setDias([...dias, id]);
+            console.log(dias);
+        }
+        else if (selected) 
+        {
+            setSelected(false);
+            setDias(dias.filter((habito) => habito !== id));
+            console.log(dias);
+        }
+    }
+
+
+
+    return (
+        <Days selected={selected} disabled={disabled} onClick={selecionar}>{text}</Days>
+    )
+
+
+   
 }
 
 const Container = styled.div`
