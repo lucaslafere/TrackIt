@@ -82,43 +82,38 @@ export default function TelaHabitos() {
         }
     }
 
-    //funcao incompleta, falta selecionar os dias. Caixa de criar novo hábito fica aqui
+    //Falta loading no savebutton, caixa de criar novo hábito fica aqui
     const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
 
     function criarHabito() {
 
         //SaveButton precisa de um loading quando disabled
         if (openForm)
-        return (
-            <ContainerNovoHabito>
-                <Input
-                    placeholder='nome do hábito'
-                    type='name'
-                    disabled={disabled}
-                    value={nomeHabitoNovo}
-                    onChange={e => setNomeHabitoNovo(e.target.value)} />
-                <ContainerDays>
-                    {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} index={index} id={index+1} text={dia} dias={dias} setDias={setDias} />)}
-                </ContainerDays>
-                <ContainerCreate>
-                    <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
-                    {/* Esse botao de salvar precisa de um loading quando disabled*/}
-                    <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
-                </ContainerCreate>
-            </ContainerNovoHabito>
-        )
+            return (
+                <ContainerNovoHabito>
+                    <Input
+                        placeholder='nome do hábito'
+                        type='name'
+                        disabled={disabled}
+                        value={nomeHabitoNovo}
+                        onChange={e => setNomeHabitoNovo(e.target.value)} />
+                    <ContainerDays>
+                        {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} id={index} text={dia} dias={dias} setDias={setDias} />)}
+                    </ContainerDays>
+                    <ContainerCreate>
+                        <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
+                        {/* Esse botao de salvar precisa de um loading quando disabled*/}
+                        <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
+                    </ContainerCreate>
+                </ContainerNovoHabito>
+            )
     }
 
-   
-
-    //funcao nova de selecionar dia, totalmente incompleta, vai ser colocada dentro do componente ButtonDays:
-    function selecionarDia () {
-    }
 
     //Render
-        useEffect(() => buscarHabitos(), []);
-        const TelaHabitos = montarTelaHabitos();
-        const AbrirNovoHabito = criarHabito ();
+    useEffect(() => buscarHabitos(), []);
+    const TelaHabitos = montarTelaHabitos();
+    const AbrirNovoHabito = criarHabito();
     return (
         <>
             <Header />
@@ -134,31 +129,25 @@ export default function TelaHabitos() {
         </>
     )
 }
-function ButtonDays ({disabled, id, text, dias, setDias}) {
+
+// componente separado
+
+function ButtonDays({ disabled, id, text, dias, setDias }) {
     const [selected, setSelected] = useState(false);
 
-    function selecionar () {
-        if (!selected){
+    function selecionar() {
+        if (!selected) {
             setSelected(true);
             setDias([...dias, id]);
-            console.log(dias);
         }
-        else if (selected) 
-        {
+        else if (selected) {
             setSelected(false);
             setDias(dias.filter((habito) => habito !== id));
-            console.log(dias);
         }
     }
-
-
-
     return (
         <Days selected={selected} disabled={disabled} onClick={selecionar}>{text}</Days>
     )
-
-
-   
 }
 
 const Container = styled.div`
