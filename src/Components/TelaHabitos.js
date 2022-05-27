@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Header from "./shared/Header";
 import FooterMenu from "./shared/FooterMenu";
 import TokenContext from '../contexts/TokenContext';
+import ProgressContext from '../contexts/ProgressContext';
 
 export default function TelaHabitos() {
     //Enviados pra API pra criar habito novo
@@ -21,6 +21,7 @@ export default function TelaHabitos() {
 
     const [dataHabitos, setDataHabitos] = useState([]);
     const { token } = useContext(TokenContext);
+    const { progress } = useContext(ProgressContext);
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
     const body = {
         name: nomeHabitoNovo,
@@ -33,39 +34,39 @@ export default function TelaHabitos() {
     }
 
     //Funçoes de get habitos e post novo habito
-        function buscarHabitos() {
-            const promise = axios.get(URL, config)
-            promise
-                .then((res) => {
-                    console.log("Listando habitos do usuario");
-                    console.log(res.data)
-                    setDataHabitos(res.data)
-                })
-                .catch(err => {
-                    alert(err);
-                    console.log(err.status)
-                })
+    function buscarHabitos() {
+        const promise = axios.get(URL, config)
+        promise
+            .then((res) => {
+                console.log("Listando habitos do usuario");
+                console.log(res.data)
+                setDataHabitos(res.data)
+            })
+            .catch(err => {
+                alert(err);
+                console.log(err.status)
+            })
+    }
+
+
+    //falta loading
+    function enviarHabitoNovo() {
+        setLoading(true);
+        setDisabled(true);
+        const request = axios.post(URL, body, config);
+
+        if (dias.length === 0) {
+            alert("Você deve selecionar pelo menos um dia!")
+            setDisabled(false);
+            setLoading(false);
+        }
+        else if (nomeHabitoNovo === "") {
+            alert("Seu hábito deve ter um nome!")
+            setDisabled(false);
+            setLoading(false);
         }
 
-
-        //falta loading
-        function enviarHabitoNovo() {
-            setLoading(true);
-            setDisabled(true);
-            const request = axios.post(URL, body, config);
-
-            if (dias.length === 0) {
-                alert("Você deve selecionar pelo menos um dia!")
-                setDisabled(false);
-                setLoading(false);
-            }
-            else if (nomeHabitoNovo === ""){
-                alert("Seu hábito deve ter um nome!")
-                setDisabled(false);
-                setLoading(false);
-            }
-
-            else {
+        else {
             request
                 .then((res) => {
                     console.log("Hábito criado com sucesso");
@@ -83,47 +84,44 @@ export default function TelaHabitos() {
         }
     }
 
-    // essa funçao abaixo nao está completa, o map de habitos fica aqui
-        function montarTelaHabitos() {
-            if (dataHabitos.length === 0) {
-                return (
-                    <NenhumHabito>Você não tem nenhum hábito <br />
-                        cadastrado ainda. Adicione um hábito para começar a trackear!</NenhumHabito>
-                )
-            }
-            else {
-                return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} day0={el.days[0]} day1={el.days[1]} day2={el.days[2]} day3={el.days[3]} day4={el.days[4]} day5={el.days[5]} day6={el.days[6]} setDataHabitos={setDataHabitos} />)
-            }
+    function montarTelaHabitos() {
+        if (dataHabitos.length === 0) {
+            return (
+                <NenhumHabito>Você não tem nenhum hábito <br />
+                    cadastrado ainda. Adicione um hábito para começar a trackear!</NenhumHabito>
+            )
         }
+        else {
+            return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} day0={el.days[0]} day1={el.days[1]} day2={el.days[2]} day3={el.days[3]} day4={el.days[4]} day5={el.days[5]} day6={el.days[6]} setDataHabitos={setDataHabitos} />)
+        }
+    }
 
     //Falta loading no savebutton, caixa de criar novo hábito fica aqui
-        const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
+    const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
 
-        function criarHabito() {
+    function criarHabito() {
 
-            //SaveButton precisa de um loading quando disabled
-            if (openForm)
-                return (
-                    <ContainerNovoHabito>
-                        <Input
-                            placeholder='nome do hábito'
-                            type='name'
-                            disabled={disabled}
-                            value={nomeHabitoNovo}
-                            onChange={e => setNomeHabitoNovo(e.target.value)} />
-                        <ContainerDays>
-                            {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} id={index} text={dia} dias={dias} setDias={setDias} />)}
-                        </ContainerDays>
-                        <ContainerCreate>
-                            <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
-                            {/* Esse botao de salvar precisa de um loading quando disabled*/}
-                            <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
-                        </ContainerCreate>
-                    </ContainerNovoHabito>
-                )
-        }
-
-
+        //SaveButton precisa de um loading quando disabled
+        if (openForm)
+            return (
+                <ContainerNovoHabito>
+                    <Input
+                        placeholder='nome do hábito'
+                        type='name'
+                        disabled={disabled}
+                        value={nomeHabitoNovo}
+                        onChange={e => setNomeHabitoNovo(e.target.value)} />
+                    <ContainerDays>
+                        {arrDias.map((dia, index) => <ButtonDays key={index} disabled={disabled} id={index} text={dia} dias={dias} setDias={setDias} />)}
+                    </ContainerDays>
+                    <ContainerCreate>
+                        <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
+                        {/* Esse botao de salvar precisa de um loading quando disabled*/}
+                        <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
+                    </ContainerCreate>
+                </ContainerNovoHabito>
+            )
+    }
     //Render
     useEffect(() => buscarHabitos(), []);
     const TelaHabitos = montarTelaHabitos();
@@ -164,11 +162,11 @@ function ButtonDays({ disabled, id, text, dias, setDias }) {
     )
 }
 
-function Habito ({id, name, day0, day1, day2, day3, day4, day5, day6, setDataHabitos}) {
+function Habito({ id, name, day0, day1, day2, day3, day4, day5, day6, setDataHabitos }) {
     const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
     const { token } = useContext(TokenContext);
 
-    function apagarHabito () {
+    function apagarHabito() {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -176,9 +174,9 @@ function Habito ({id, name, day0, day1, day2, day3, day4, day5, day6, setDataHab
         }
 
         if (window.confirm("Você deseja apagar esse hábito?") === true) {
-            const request = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, {data: {}, headers:{Authorization: `Bearer ${token}`}});
+            const request = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, { data: {}, headers: { Authorization: `Bearer ${token}` } });
             request
-                .then((res) => {
+                .then(() => {
                     console.log("Hábito deletado com sucesso!");
                     const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
                     promise
@@ -191,7 +189,7 @@ function Habito ({id, name, day0, day1, day2, day3, day4, day5, day6, setDataHab
                             alert(err);
                             console.log(err.status)
                         });
-                } )
+                })
                 .catch((err) => console.log(err.status));
         }
     }
@@ -202,34 +200,31 @@ function Habito ({id, name, day0, day1, day2, day3, day4, day5, day6, setDataHab
             <ion-icon name="trash-outline" id={id} onClick={apagarHabito}></ion-icon>
             <NomeHabito>{name}</NomeHabito>
             <ContainerDays>
-                {arrDias.map((dia, index) => 
-                {
-                        if (index === day0) {
-                            return <Days key={index} index={index} selected={true} >{dia}</Days>
-                        }
-                        else if (index === day1) {
-                            return <Days key={index} index={index} selected={true} >{dia}</Days>
-                        }
-                        else if (index === day2) {
-                            return <Days key={index} index={index} selected={true} >{dia}</Days>
-                        }
-                        else if (index === day3) {
-                            return <Days key={index} index={index} selected={true} >{dia}</Days>
-                        }
-                        else if (index === day4) {
-                            return <Days key={index} index={index} selected={true} >{dia}</Days>
-                        }
-                        else if (index === day5) {
-                            return <Days key={index} index={index} selected={true} >{dia}</Days>
-                        }
-                        else if (index === day6) {
-                            return <Days key={index} index={index} selected={true} >{dia}</Days>
-                        }
-                        return <Days key={index} index={index} selected={false}>{dia}</Days>})
+                {arrDias.map((dia, index) => {
+                    if (index === day0) {
+                        return <Days key={index} index={index} selected={true} >{dia}</Days>
                     }
-                
-                
-                
+                    else if (index === day1) {
+                        return <Days key={index} index={index} selected={true} >{dia}</Days>
+                    }
+                    else if (index === day2) {
+                        return <Days key={index} index={index} selected={true} >{dia}</Days>
+                    }
+                    else if (index === day3) {
+                        return <Days key={index} index={index} selected={true} >{dia}</Days>
+                    }
+                    else if (index === day4) {
+                        return <Days key={index} index={index} selected={true} >{dia}</Days>
+                    }
+                    else if (index === day5) {
+                        return <Days key={index} index={index} selected={true} >{dia}</Days>
+                    }
+                    else if (index === day6) {
+                        return <Days key={index} index={index} selected={true} >{dia}</Days>
+                    }
+                    return <Days key={index} index={index} selected={false}>{dia}</Days>
+                })
+                }
             </ContainerDays>
         </ContainerHabitos>
     )
