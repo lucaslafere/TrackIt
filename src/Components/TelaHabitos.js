@@ -52,8 +52,20 @@ export default function TelaHabitos() {
         function enviarHabitoNovo() {
             setLoading(true);
             setDisabled(true);
-
             const request = axios.post(URL, body, config);
+
+            if (dias.length === 0) {
+                alert("Você deve selecionar pelo menos um dia!")
+                setDisabled(false);
+                setLoading(false);
+            }
+            else if (nomeHabitoNovo === ""){
+                alert("Seu hábito deve ter um nome!")
+                setDisabled(false);
+                setLoading(false);
+            }
+
+            else {
             request
                 .then((res) => {
                     console.log("Hábito criado com sucesso");
@@ -69,7 +81,7 @@ export default function TelaHabitos() {
                     setDisabled(false);
                 })
         }
-
+    }
 
     // essa funçao abaixo nao está completa, o map de habitos fica aqui
         function montarTelaHabitos() {
@@ -80,7 +92,7 @@ export default function TelaHabitos() {
                 )
             }
             else {
-                // return dataHabitos.map((el, index) => <Habito/>)
+                return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} selectedDays={el.days} />)
             }
         }
 
@@ -152,12 +164,25 @@ function ButtonDays({ disabled, id, text, dias, setDias }) {
     )
 }
 
+function Habito ({id, name, selectedDays}) {
+    const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
+    return (
+        <ContainerHabitos>
+            <ion-icon name="trash-outline"></ion-icon>
+            <NomeHabito>{name}</NomeHabito>
+            <ContainerDays>
+                {arrDias.map((dia, index) => <Days key={index} >{dia}</Days>)}
+            </ContainerDays>
+        </ContainerHabitos>
+    )
+}
+
 const Container = styled.div`
-height: 100vh;
-position: fixed;
+height: 100%;
 width: 100%;
 background-color: #F2F2F2;
 padding: 1rem;
+
 `
 const TitleContainer = styled.div`
 width: 100%;
@@ -284,4 +309,34 @@ const SaveButton = styled.button`
     font-weight: 400;
     font-size: 16px;
     color: #FFFFFF;
+`
+const ContainerHabitos = styled.div`
+width: 100%;
+min-height: 90px;
+background-color: #FFFFFF;
+border-radius: 6px;
+margin-bottom: 2rem;
+padding: 1rem;
+display: flex;
+flex-direction: column;
+gap: 8px;
+position: relative;
+    ion-icon {
+        position: absolute;
+        top: 10%;
+        right: 2%;
+        color: #666666;
+    }
+    &:last-child {
+    margin-bottom: 80px;
+}
+`
+
+const NomeHabito = styled.div`
+width: 90%;
+font-family: 'Lexend Deca';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+color: #666666;
 `

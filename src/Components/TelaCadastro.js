@@ -43,6 +43,9 @@ export default function TelaCadastro() {
             })
     }
 
+    if (loading){
+        return "Carregando, por favor aguarde"
+    }
     return (
         <Container>
             <LogoBox>

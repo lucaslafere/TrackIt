@@ -13,25 +13,19 @@ export default function TelaLogin() {
     const [senha, setSenha] = useState("");
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login";
     const navigate = useNavigate();
-    const { token, setToken } = useContext(TokenContext);
+    
+    const { setToken } = useContext(TokenContext);
     const { setImage } = useContext(ImageContext);
 
     const body = {
         email,
         password: senha
     }
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-
 
     function entrar(event) {
         event.preventDefault();
         setDisabled(true);
         setLoading(true);
-        // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
 
         const request = axios.post(URL, body);
         request
@@ -48,6 +42,12 @@ export default function TelaLogin() {
             })
     }
 
+
+
+    if (loading){
+        //spinner fica aqui
+        return "Carregando, por favor aguarde"
+    }
     return (
         <Container>
             <LogoBox>
