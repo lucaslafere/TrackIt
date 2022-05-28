@@ -12,7 +12,7 @@ import ProgressContext from './contexts/ProgressContext';
 export default function App() {
     const [token, setToken] = useState("");
     const [image, setImage] = useState("");
-    const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState([]);
 
 
     return (

@@ -42,6 +42,9 @@ export default function TelaHoje() {
                 console.log("Listando hábitos de hoje");
                 console.log(res.data);
                 setDataHabitos(res.data)
+                if (progress.length > 0){
+                    setFeito(true)
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -59,26 +62,42 @@ export default function TelaHoje() {
             return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} done={el.done} currentSequence={el.currentSequence} highestSequence={el.highestSequence} setDataHabitos={setDataHabitos}/>)
         }
     }
-    // Render
-    useEffect(() => buscarHabitos(), []);
-    const TelaHabitos = montarTelaHabitos();
-
-
+    function montarPorcentagem() {
+        const concluidos = (progress.length / dataHabitos.length) * 100;
+        const concluidosAproximado = Math.round(concluidos);
+        
+        if (progress.length > 0) {
+            return (
+                <TextoPorcentagem feito={feito}>
+                    {concluidosAproximado}% dos hábitos concluídos
+                </TextoPorcentagem>
+            )
+        }
+        return (
+            <TextoPorcentagem feito={feito}>
+                Nenhum hábito concluído ainda
+            </TextoPorcentagem>
+        )
+    }
     //logica conclusao %
     const concluidos = (progress.length / dataHabitos.length) * 100;
     const concluidosAproximado = Math.round(concluidos);
 
-    if (progress.length > 0) {
-        setFeito(true)
-    }
+
+    // Render
+    useEffect(() => buscarHabitos(), []);
+    const TelaHabitos = montarTelaHabitos();
+    const ListarPorcentagem = montarPorcentagem();
+
+
 
     return (
         <>
             <Header />
-            <Container>
+            <Container feito={feito}>
                 <TitleContainer feito={feito}>
                     <h1>{diaCerto}, {date}</h1>
-                    <p>{feito ? `${concluidosAproximado}% dos hábitos concluídos` : `Nenhum hábito concluído ainda`}</p>
+                    {ListarPorcentagem}
                 </TitleContainer>
                 {TelaHabitos}
             </Container>
@@ -90,14 +109,17 @@ export default function TelaHoje() {
 function Habito({ id, name, done, currentSequence, highestSequence, setDataHabitos }) {
     const [recorde, setRecorde] = useState(false);
     const { token } = useContext(TokenContext);
+    const { progress, setProgress } = useContext(ProgressContext);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     }
     function testarRecorde () {
-        {highestSequence === currentSequence && currentSequence !== 0 ? setRecorde(true) : setRecorde(false)}
-        console.log("recorde testado")
+        if (highestSequence === currentSequence){
+            setRecorde(true);
+        }
+        else setRecorde(false);
     }
     function buscarHabitos() {
         const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
@@ -119,8 +141,9 @@ function Habito({ id, name, done, currentSequence, highestSequence, setDataHabit
             requisicao
                 .then(() => {
                     console.log("marcou");
-                    buscarHabitos()
+                    buscarHabitos();
                     testarRecorde();
+                    setProgress([...progress, id]);
                 })
                 .catch((err) => console.log(err));
         }
@@ -131,6 +154,7 @@ function Habito({ id, name, done, currentSequence, highestSequence, setDataHabit
                     console.log("desmarcou")
                     buscarHabitos()
                     testarRecorde();
+                    setProgress(progress.filter((el) => el !== id))
                 })
                 .catch((err) => console.log(err));
         }
@@ -138,13 +162,19 @@ function Habito({ id, name, done, currentSequence, highestSequence, setDataHabit
     useEffect(() => testarRecorde(), []);
 
     return (
-        <ContainerHabitos>
+        <ContainerHabitos done={done} recorde={recorde}>
             <TextoHabitos>
                 <h2>{name}</h2>
-                <SequenciaAtual done={done} recorde={recorde}>Sequência atual: <span>{currentSequence} dias</span></SequenciaAtual>
-                <SeuRecorde recorde={recorde} done={done}>Seu recorde: <span>{highestSequence} dias</span></SeuRecorde>
+                <SequenciaAtual done={done}>
+                    Sequência atual: <span>{currentSequence} dias</span>
+                </SequenciaAtual>
+                <SeuRecorde done={done} recorde={recorde}>
+                    Seu recorde: <span>{highestSequence} dias</span>
+                </SeuRecorde>
             </TextoHabitos>
-            <ion-icon name="checkbox" done={done} onClick={habitoFeito}></ion-icon>
+            <ContainerIcon done={done} onClick={habitoFeito}>
+                <ion-icon name="checkbox"></ion-icon>
+            </ContainerIcon>
         </ContainerHabitos>
     )
 }
@@ -171,13 +201,13 @@ align-items: flex-start;
     font-size: 24px;
     color: #126BA5;
     }
-    p {
-    font-family: 'Lexend Deca';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1rem;
-    color: ${props => props.feito ? "#8FC549" : "#BABABA"};
-    }
+`
+const TextoPorcentagem = styled.div`
+font-family: 'Lexend Deca';
+font-style: normal;
+font-weight: 400;
+font-size: 1rem;
+color: ${props => props.feito ? "#8FC549" : "#BABABA"};
 `
 const NenhumHabito = styled.div`
 font-family: 'Lexend Deca';
@@ -198,16 +228,13 @@ margin-bottom: 2rem;
 
 display: flex;
 justify-content: space-between;
+align-items: center;
 
-    ion-icon {
-        color: ${props => props.done ? "#8FC549" : "#EBEBEB"};
-        font-size: 90px;
-    }
     h2 {
     font-family: 'Lexend Deca';
     font-style: normal;
     font-weight: 400;
-    font-size: 24px;
+    font-size: 1.5rem;
     color: #666666;
     margin-bottom: 20px;
     margin-top: 10px;
@@ -241,5 +268,11 @@ const SeuRecorde = styled.div`
     color: #666666;
     span {
     color: ${props => props.recorde && props.done ? "#8FC549" : "#666666"};
+    }
+`
+const ContainerIcon = styled.div`
+    ion-icon {
+        color: ${props => props.done ? "#8FC549" : "#EBEBEB"};
+        font-size: 90px;
     }
 `
