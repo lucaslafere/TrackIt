@@ -36,6 +36,7 @@ export default function TelaCadastro() {
             })
             .catch(err => {
                 alert(err);
+                setLoading(false);
                 setDisabled(false);
             })
     }

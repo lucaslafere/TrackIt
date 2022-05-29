@@ -41,6 +41,7 @@ export default function TelaLogin() {
             .catch(err => {
                 alert(err);
                 setDisabled(false);
+                setLoading(false)
             })
     }
 

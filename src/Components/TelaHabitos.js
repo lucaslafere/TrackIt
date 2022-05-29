@@ -78,6 +78,7 @@ export default function TelaHabitos() {
                 .catch(err => {
                     alert(err);
                     setDisabled(false);
+                    setLoading(false);
                 })
         }
     }
