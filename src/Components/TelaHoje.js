@@ -116,6 +116,10 @@ function Habito({ id, name, done, currentSequence, highestSequence, dataHabitos,
             setProgress([...progress, id]);
             setFeito(true);
         }
+        else if (!done) {
+            setProgress(progress.filter((el) => el !== id))
+
+        }
     }
     function testarRecorde () {
         if (highestSequence === currentSequence){
