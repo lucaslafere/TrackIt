@@ -73,7 +73,7 @@ margin-top: 80px;
     img {
         border-radius: 50%;
         margin-bottom: 20px;
-        max-width: 200px;
-        max-height: 200px;
+        width: 200px;
+        height: 200px;
     }
 `
