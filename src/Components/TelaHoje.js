@@ -42,13 +42,9 @@ export default function TelaHoje() {
                 console.log("Listando hábitos de hoje");
                 console.log(res.data);
                 setDataHabitos(res.data)
-                if (progress.length > 0){
-                    setFeito(true)
-                }
             })
             .catch(err => {
                 console.log(err);
-                console.log(err.status);
             })
     }
 
@@ -59,13 +55,13 @@ export default function TelaHoje() {
             )
         }
         else {
-            return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} done={el.done} currentSequence={el.currentSequence} highestSequence={el.highestSequence} setDataHabitos={setDataHabitos}/>)
+            return dataHabitos.map((el, index) => <Habito key={index} id={el.id} name={el.name} done={el.done} currentSequence={el.currentSequence} highestSequence={el.highestSequence} dataHabitos={dataHabitos} setDataHabitos={setDataHabitos} setFeito={setFeito}/>)
         }
     }
     function montarPorcentagem() {
         const concluidos = (progress.length / dataHabitos.length) * 100;
         const concluidosAproximado = Math.round(concluidos);
-        
+
         if (progress.length > 0) {
             return (
                 <TextoPorcentagem feito={feito}>
@@ -74,7 +70,7 @@ export default function TelaHoje() {
             )
         }
         return (
-            <TextoPorcentagem feito={feito}>
+            <TextoPorcentagem>
                 Nenhum hábito concluído ainda
             </TextoPorcentagem>
         )
@@ -94,8 +90,8 @@ export default function TelaHoje() {
     return (
         <>
             <Header />
-            <Container feito={feito}>
-                <TitleContainer feito={feito}>
+            <Container>
+                <TitleContainer>
                     <h1>{diaCerto}, {date}</h1>
                     {ListarPorcentagem}
                 </TitleContainer>
@@ -106,13 +102,19 @@ export default function TelaHoje() {
     )
 }
 
-function Habito({ id, name, done, currentSequence, highestSequence, setDataHabitos }) {
+function Habito({ id, name, done, currentSequence, highestSequence, dataHabitos, setDataHabitos, setFeito }) {
     const [recorde, setRecorde] = useState(false);
     const { token } = useContext(TokenContext);
     const { progress, setProgress } = useContext(ProgressContext);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
+        }
+    }
+    function testarPorcentagem () {
+        if (done) {
+            setProgress([...progress, id]);
+            setFeito(true);
         }
     }
     function testarRecorde () {
@@ -128,6 +130,7 @@ function Habito({ id, name, done, currentSequence, highestSequence, setDataHabit
             .then((res) => {
                 console.log("Listando hábitos de hoje");
                 console.log(res.data);
+                setFeito(true)
                 setDataHabitos(res.data);
             })
             .catch(err => {
@@ -152,6 +155,7 @@ function Habito({ id, name, done, currentSequence, highestSequence, setDataHabit
             requisicao
                 .then(() => {
                     console.log("desmarcou")
+                    setFeito(true)
                     buscarHabitos()
                     testarRecorde();
                     setProgress(progress.filter((el) => el !== id))
@@ -160,6 +164,8 @@ function Habito({ id, name, done, currentSequence, highestSequence, setDataHabit
         }
     }
     useEffect(() => testarRecorde(), []);
+    useEffect(() => testarPorcentagem(), []);
+
 
     return (
         <ContainerHabitos done={done} recorde={recorde}>
@@ -182,6 +188,7 @@ function Habito({ id, name, done, currentSequence, highestSequence, setDataHabit
 
 const Container = styled.div`
 height: 100%;
+min-height: 100vh;
 width: 100%;
 background-color: #F2F2F2;
 padding: 1rem;
