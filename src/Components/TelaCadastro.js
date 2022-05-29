@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../Assets/logo.png'
 import { Container, LogoBox, Form, Button, TextLink, Input } from './TelaLogin';
+import { ThreeDots } from 'react-loader-spinner';
 
 
 export default function TelaCadastro() {
@@ -26,9 +27,6 @@ export default function TelaCadastro() {
         event.preventDefault();
         setDisabled(true)
         setLoading(true);
-        // Falta um loading spinner aqui com a lógica de que se está carregando, acontece as coisas de cima e aparece um loading, quando a request executa ali embaixo, nao tem mais loading 
-
-
         const request = axios.post(URL, body);
         request
             .then(() => {
@@ -82,7 +80,9 @@ export default function TelaCadastro() {
                     disabled={disabled}
                     value={foto}
                     onChange={e => setFoto(e.target.value)} />
-                <Button disabled={disabled} type='submit'>Cadastrar</Button>
+                <Button disabled={disabled} type='submit'>
+                    {loading ? <ThreeDots color="#FFFFFF" height={80} width={80} /> : 'Cadastrar'}
+                </Button>
             </Form>
             <Link to="/">
                 <TextLink>Já tem uma conta? Faça login!</TextLink>

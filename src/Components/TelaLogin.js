@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import { ThreeDots } from 'react-loader-spinner';
 import logo from '../Assets/logo.png';
 import TokenContext from '../contexts/TokenContext';
 import ImageContext from '../contexts/ImageContext';
@@ -15,7 +16,7 @@ export default function TelaLogin() {
     const navigate = useNavigate();
     
     const { setToken } = useContext(TokenContext);
-    const { setImage } = useContext(ImageContext);
+    const { setImage, setName } = useContext(ImageContext);
 
     const body = {
         email,
@@ -33,6 +34,7 @@ export default function TelaLogin() {
                 console.log("Login feito com sucesso");
                 setToken(res.data.token);
                 setImage(res.data.image);
+                setName(res.data.name);
                 setLoading(false);
                 navigate("/hoje");
             })
@@ -42,12 +44,6 @@ export default function TelaLogin() {
             })
     }
 
-
-
-    if (loading){
-        //spinner fica aqui
-        return "Carregando, por favor aguarde"
-    }
     return (
         <Container>
             <LogoBox>
@@ -70,7 +66,9 @@ export default function TelaLogin() {
                     onChange={e => setSenha(e.target.value)} />
                 <Button
                     disabled={disabled}
-                    type='submit'>Entrar</Button>
+                    type='submit'>
+                        {loading ? <ThreeDots color="#FFFFFF" height={80} width={80} /> : 'Entrar'}
+                </Button>
             </Form>
             <Link to={`/cadastro`}>
                 <TextLink>Não tem uma conta? Cadastre-se!</TextLink>
@@ -118,6 +116,9 @@ background: #52B6FF;
 border: 1px solid #52B6FF;
 border-radius: 8px;
 opacity: ${props => props.disabled ? 0.7 : 1};
+display: flex;
+align-items: center;
+justify-content: center;
 
 font-weight: 400;
 font-size: 20px;

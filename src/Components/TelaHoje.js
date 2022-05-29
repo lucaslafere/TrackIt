@@ -43,7 +43,6 @@ export default function TelaHoje() {
                 console.log(res.data);
                 setDataHabitos(res.data)
                 for (let i = 0; i < res.data.length; i++){
-                    console.log("rodei o loop")
                     if(res.data[i].done){
                         arrTest.push(res.data[i].id)
                         setProgress([...arrTest]);
@@ -168,10 +167,6 @@ function Habito({ id, name, done, currentSequence, highestSequence, dataHabitos,
         }
     }
     useEffect(() => testarRecorde(), []);
-    useEffect(() => console.log(progress)
-    , [progress]);
-
-
     return (
         <ContainerHabitos done={done} recorde={recorde}>
             <TextoHabitos>

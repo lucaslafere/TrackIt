@@ -9,16 +9,18 @@ import TokenContext from './contexts/TokenContext';
 import ImageContext from './contexts/ImageContext';
 import ProgressContext from './contexts/ProgressContext';
 
+
 export default function App() {
     const [token, setToken] = useState("");
     const [image, setImage] = useState("");
+    const [name, setName] = useState("");
     const [progress, setProgress] = useState([]);
     const [percentage, setPercentage] = useState(0);
 
 
     return (
         <TokenContext.Provider value={{token, setToken}} >
-            <ImageContext.Provider value={{image, setImage}}>
+            <ImageContext.Provider value={{image, setImage, name, setName}}>
                 <ProgressContext.Provider value={{progress, setProgress, percentage, setPercentage}}>
                     <BrowserRouter>
                         <Routes>

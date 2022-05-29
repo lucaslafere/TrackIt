@@ -4,7 +4,7 @@ import logo from "../../Assets/trackIt-logo-pequena.svg";
 import ImageContext from "../../contexts/ImageContext";
 
 export default function Header () {
-    const { image } = useContext(ImageContext);
+    const { image, name } = useContext(ImageContext);
 
     return (
         <HeaderContainer>

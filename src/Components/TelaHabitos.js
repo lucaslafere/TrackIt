@@ -5,6 +5,7 @@ import Header from "./shared/Header";
 import FooterMenu from "./shared/FooterMenu";
 import TokenContext from '../contexts/TokenContext';
 import ProgressContext from '../contexts/ProgressContext';
+import { ThreeDots } from 'react-loader-spinner';
 
 export default function TelaHabitos() {
     //Enviados pra API pra criar habito novo
@@ -16,12 +17,9 @@ export default function TelaHabitos() {
     const [disabled, setDisabled] = useState(false);
     const [openForm, setOpenForm] = useState(false);
 
-
     //Dados envolvendo API (get.data dos habitos, enviar token, URL da API, body. config (header token))
-
     const [dataHabitos, setDataHabitos] = useState([]);
     const { token } = useContext(TokenContext);
-    const { progress } = useContext(ProgressContext);
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
     const body = {
         name: nomeHabitoNovo,
@@ -33,7 +31,7 @@ export default function TelaHabitos() {
         }
     }
 
-    //Funçoes de get habitos e post novo habito
+    //Funçao de get habitos
     function buscarHabitos() {
         const promise = axios.get(URL, config)
         promise
@@ -49,7 +47,7 @@ export default function TelaHabitos() {
     }
 
 
-    //falta loading
+    //enviar um habito novo
     function enviarHabitoNovo() {
         setLoading(true);
         setDisabled(true);
@@ -83,7 +81,7 @@ export default function TelaHabitos() {
                 })
         }
     }
-
+//mostrar os habitos
     function montarTelaHabitos() {
         if (dataHabitos.length === 0) {
             return (
@@ -96,12 +94,11 @@ export default function TelaHabitos() {
         }
     }
 
-    //Falta loading no savebutton, caixa de criar novo hábito fica aqui
     const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
 
+    // parte de criar habito novo
     function criarHabito() {
 
-        //SaveButton precisa de um loading quando disabled
         if (openForm)
             return (
                 <ContainerNovoHabito>
@@ -116,8 +113,9 @@ export default function TelaHabitos() {
                     </ContainerDays>
                     <ContainerCreate>
                         <TextLink onClick={() => setOpenForm(false)}>Cancelar</TextLink>
-                        {/* Esse botao de salvar precisa de um loading quando disabled*/}
-                        <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>Salvar</SaveButton>
+                        <SaveButton disabled={disabled} onClick={enviarHabitoNovo}>
+                            {loading ? <ThreeDots color="#FFFFFF" height={80} width={80} /> : 'Salvar'}
+                        </SaveButton>
                     </ContainerCreate>
                 </ContainerNovoHabito>
             )
@@ -142,7 +140,7 @@ export default function TelaHabitos() {
     )
 }
 
-// componente separado
+// componente separado dias da semana
 
 function ButtonDays({ disabled, id, text, dias, setDias }) {
     const [selected, setSelected] = useState(false);
@@ -161,7 +159,7 @@ function ButtonDays({ disabled, id, text, dias, setDias }) {
         <Days selected={selected} disabled={disabled} onClick={selecionar}>{text}</Days>
     )
 }
-
+// componente hábito já criado
 function Habito({ id, name, day0, day1, day2, day3, day4, day5, day6, setDataHabitos }) {
     const arrDias = ["D", "S", "T", "Q", "Q", "S", "S"]
     const { token } = useContext(TokenContext);
@@ -237,6 +235,7 @@ width: 100%;
 background-color: #F2F2F2;
 padding: 1rem;
 `
+
 const TitleContainer = styled.div`
 width: 100%;
 display: flex;
@@ -269,6 +268,7 @@ margin-bottom: 2rem;
     color: #FFFFFF;
 }
 `
+export { TitleContainer }
 const NenhumHabito = styled.div`
 font-family: 'Lexend Deca';
 font-style: normal;
