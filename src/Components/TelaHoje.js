@@ -23,6 +23,7 @@ export default function TelaHoje() {
 
     const [dataHabitos, setDataHabitos] = useState([]);
     const [feito, setFeito] = useState(false);
+    const arrTest = [];
 
     // dayjs
         const now = dayjs().locale('pt-br').format('dddd');
@@ -42,6 +43,14 @@ export default function TelaHoje() {
                 console.log("Listando hábitos de hoje");
                 console.log(res.data);
                 setDataHabitos(res.data)
+                for (let i = 0; i < res.data.length; i++){
+                    console.log("rodei o loop")
+                    if(res.data[i].done){
+                        arrTest.push(res.data[i].id)
+                        setProgress([...arrTest]);
+                        setFeito(true);
+                    }
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -116,10 +125,6 @@ function Habito({ id, name, done, currentSequence, highestSequence, dataHabitos,
             setProgress([...progress, id]);
             setFeito(true);
         }
-        else if (!done) {
-            setProgress(progress.filter((el) => el !== id))
-
-        }
     }
     function testarRecorde () {
         if (highestSequence === currentSequence){
@@ -168,7 +173,8 @@ function Habito({ id, name, done, currentSequence, highestSequence, dataHabitos,
         }
     }
     useEffect(() => testarRecorde(), []);
-    useEffect(() => testarPorcentagem(), []);
+    useEffect(() => console.log(progress)
+    , [progress]);
 
 
     return (
