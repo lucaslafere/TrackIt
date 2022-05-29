@@ -1,12 +1,37 @@
+import { useContext } from 'react';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom';
-
 import styled from "styled-components";
+import ProgressContext from '../../contexts/ProgressContext';
+
 
 export default function FooterMenu () {
+    const { progress, percentage } = useContext(ProgressContext);
+
     return (
         <FooterContainer>
             <Link to="/habitos"><TextLink>Hábitos</TextLink></Link>
-            <Link to="/hoje"><TextLink>Hoje</TextLink></Link>
+            <Link to="/hoje">
+                <CirculoProgresso>
+                    <CircularProgressbar value={percentage} text={'Hoje'} 
+                    background
+                    backgroundPadding={6}
+                    styles={{
+                      background: {
+                        fill: "#3e98c7"
+                      },
+                      text: {
+                        fill: "#fff"
+                      },
+                      path: {
+                        stroke: "#fff"
+                      },
+                      trail: { stroke: "transparent" }
+                    }}
+                    />  
+                </CirculoProgresso>
+            </Link>
             <Link to="/historico"><TextLink>Histórico</TextLink></Link>
         </FooterContainer>
     )
@@ -33,4 +58,9 @@ color: #52B6FF;
 font-weight: 400;
 font-family: 'Lexend Deca';
 font-style: normal;
+`
+const CirculoProgresso = styled.div`
+width: 100px;
+margin-bottom: 64px;
+
 `

@@ -13,12 +13,13 @@ export default function App() {
     const [token, setToken] = useState("");
     const [image, setImage] = useState("");
     const [progress, setProgress] = useState([]);
+    const [percentage, setPercentage] = useState(0);
 
 
     return (
         <TokenContext.Provider value={{token, setToken}} >
             <ImageContext.Provider value={{image, setImage}}>
-                <ProgressContext.Provider value={{progress, setProgress}}>
+                <ProgressContext.Provider value={{progress, setProgress, percentage, setPercentage}}>
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<TelaLogin />} ></Route>

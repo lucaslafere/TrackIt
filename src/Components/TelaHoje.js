@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
@@ -12,7 +11,7 @@ import ProgressContext from '../contexts/ProgressContext';
 
 export default function TelaHoje() {
     //Variaveis de estado, const, etc
-    const { progress, setProgress } = useContext(ProgressContext);
+    const { progress, setProgress, percentage, setPercentage } = useContext(ProgressContext);
     const { token } = useContext(TokenContext);
     const config = {
         headers: {
@@ -69,12 +68,12 @@ export default function TelaHoje() {
     }
     function montarPorcentagem() {
         const concluidos = (progress.length / dataHabitos.length) * 100;
-        const concluidosAproximado = Math.round(concluidos);
+        setPercentage(Math.round(concluidos));
 
         if (progress.length > 0) {
             return (
                 <TextoPorcentagem feito={feito}>
-                    {concluidosAproximado}% dos hábitos concluídos
+                    {percentage}% dos hábitos concluídos
                 </TextoPorcentagem>
             )
         }
@@ -84,10 +83,6 @@ export default function TelaHoje() {
             </TextoPorcentagem>
         )
     }
-    //logica conclusao %
-    const concluidos = (progress.length / dataHabitos.length) * 100;
-    const concluidosAproximado = Math.round(concluidos);
-
 
     // Render
     useEffect(() => buscarHabitos(), []);
