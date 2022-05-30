@@ -69,7 +69,8 @@ font-weight: 400;
 font-size: 18px;
 line-height: 22px;
 color: #666666;
-margin-top: 80px;
+margin-top: 20px;
+text-align: center;
     img {
         border-radius: 50%;
         margin-bottom: 20px;
