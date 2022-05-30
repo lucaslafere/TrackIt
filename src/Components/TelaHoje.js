@@ -69,7 +69,7 @@ export default function TelaHoje() {
         const concluidos = (progress.length / dataHabitos.length) * 100;
         setPercentage(Math.round(concluidos));
 
-        if (progress.length > 0) {
+        if (percentage > 0) {
             return (
                 <TextoPorcentagem feito={feito}>
                     {percentage}% dos hábitos concluídos
