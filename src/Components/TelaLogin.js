@@ -39,7 +39,7 @@ export default function TelaLogin() {
                 navigate("/hoje");
             })
             .catch(err => {
-                alert(err);
+                alert("Não foi possível fazer login, verifique se os campos foram preenchidos corretamente");
                 setDisabled(false);
                 setLoading(false)
             })

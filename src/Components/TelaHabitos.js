@@ -41,7 +41,7 @@ export default function TelaHabitos() {
                 setDataHabitos(res.data)
             })
             .catch(err => {
-                alert(err);
+                alert("Não foi possível listar seus hábitos, logue novamente");
                 console.log(err.status)
             })
     }
@@ -76,7 +76,7 @@ export default function TelaHabitos() {
                     buscarHabitos();
                 })
                 .catch(err => {
-                    alert(err);
+                    alert("Não foi possível criar seu hábito, verifique os campos");
                     setDisabled(false);
                     setLoading(false);
                 })
@@ -185,7 +185,7 @@ function Habito({ id, name, day0, day1, day2, day3, day4, day5, day6, setDataHab
                             setDataHabitos(res.data)
                         })
                         .catch(err => {
-                            alert(err);
+                            alert("Não foi possível listar seus hábitos, logue novamente no site");
                             console.log(err.status)
                         });
                 })

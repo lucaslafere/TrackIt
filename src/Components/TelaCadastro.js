@@ -35,7 +35,7 @@ export default function TelaCadastro() {
                 navigate("/");
             })
             .catch(err => {
-                alert(err);
+                alert("Não foi possível completar o seu cadastro, verifique se todos os campos estão preenchidos corretamente");
                 setLoading(false);
                 setDisabled(false);
             })
